@@ -7,6 +7,8 @@ import ShopPage from './pages/shop/shop';
 import Header from './components/header/header';
 import SignInAndSignUp from './pages/sing-in-and-sign-up/sign-in-and-sign-up';
 
+import { auth } from './firebase/firebase.utils';
+
 /* const HatsPage = () => (
   <div>
       <h1>Hats page</h1>
@@ -23,18 +25,35 @@ const TopicDetail = props => {
   );
 } */
 
-function App() {
+class App extends React.Component {
+  constructor(){
+    super();
+
+    this.state = {
+      currentUser: null
+    }
+  }
+
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      this.setState({ currentUser: user });
+      //console.log(user);
+    })
+  }
+
+
   //<Route exact path='/topic/:topicId' component={TopicDetail} />
-  return (
-    <div className="App">
-      <Header />
-      <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route path='/shop' component={ShopPage} />
-        <Route path='/signin' component={SignInAndSignUp} />
-      </Switch>
-    </div>
-  );
-}
+  render(){
+    return (
+      <div className="App">
+        <Header />
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/shop' component={ShopPage} />
+          <Route path='/signin' component={SignInAndSignUp} />
+        </Switch>
+      </div>
+    );
+}}
 
 export default App;
